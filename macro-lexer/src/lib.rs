@@ -1,7 +1,9 @@
-pub mod lexer ;
+mod lexer ;
 pub mod utils {
-    pub mod tokenStream;
-    pub mod lexerError;
+    pub mod token;
+    pub mod lexer_error;
+
+    pub mod macro_lexer;
 }
 
 #[cfg(test)]
