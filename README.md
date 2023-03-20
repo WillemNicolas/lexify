@@ -4,12 +4,14 @@ The library is written in Rust and can be used by other Rust projects as a depen
 
 # Installation
 Add the following to your Cargo.toml file:
-`[dependencies]
-macro-lexer = "0.1.0"`
+```
+[dependencies]
+macro-lexer = "0.1.0"
+```
 
 # Usage
 To use the macro-lexer library, you need to build a lexer with the provided macro and run it with the source code you want to tokenize. Here's an example:
-`
+```
 #[derive(Debug,Clone)]
 enum TokenType{
     If,
@@ -46,14 +48,14 @@ fn main() {
             }
     }
 }
-
-`
+```
 
 the macro lexer uses a dsl to build the lexer with the simple grammar :
+```
     with Type,
     rule String => fn(String) -> Type, 
-    eof Type,
-
+    eof Type::Value,
+```
 
 
 
