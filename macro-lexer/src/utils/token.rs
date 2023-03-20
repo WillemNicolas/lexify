@@ -2,9 +2,9 @@ type Index = usize;
 
 #[derive(Debug)]
 pub struct Token<TokenType> {
-    token_type:TokenType,
-    line:Option<Index>,
-    column:Option<Index>,
+    pub token_type:TokenType,
+    pub line:Option<Index>,
+    pub column:Option<Index>,
 }
 
 impl<T> Token<T> {

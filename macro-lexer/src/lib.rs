@@ -1,4 +1,4 @@
-mod lexer ;
+pub mod lexer ;
 pub mod utils {
     pub mod token;
     pub mod lexer_error;
