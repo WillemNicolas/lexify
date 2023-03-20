@@ -1,7 +1,8 @@
 use std::fs;
 
-use macro_lexer::lexer_impl::{LexerBuilder};
+use macro_lexer::lexer_impl::LexerBuilder;
 use macro_lexer::lexer;
+
 #[derive(Debug,Clone)]
 enum TokenType{
     If,
