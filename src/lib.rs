@@ -1,7 +1,7 @@
 
 pub mod lexer_impl ;
 
-mod utils {
+pub mod utils {
     pub mod token;
     pub mod lexer_error;
     pub mod macro_lexer;

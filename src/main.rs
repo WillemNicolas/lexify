@@ -1,36 +1,63 @@
 use std::fs;
 
-use macro_lexer::lexer_impl::LexerBuilder;
-use macro_lexer::lexer;
+use lexify::lexer_impl::{LexerBuilder, Lexer, Converter};
+use lexify::utils::lexer_error::LexerError;
+use lexify::lexer;
 
-#[derive(Debug,Clone)]
-enum TokenType{
+#[derive(Debug)]
+enum TokenType<'input>{
     If,
     Else,
     Then,
     Equal,
-    Id(String),
-    String(String),
+    Id(&'input str),
+    String(&'input str),
     EOF
 }
 
-fn main() {
+#[derive(Debug)]
+enum Token{
+    If,
+    Else,
+    Then,
+    Equal,
+    Id,
+    String,
+    EOF
+}
+impl<'input> Converter<'input> for Token {
+    type T = TokenType<'input>;
+    fn convert(&self, src:&'input str) -> Self::T {
+        match self {
+            Token::If => TokenType::If,
+            Token::Else => TokenType::Else,
+            Token::Then => TokenType::Then,
+            Token::Equal => TokenType::Equal,
+            Token::Id => TokenType::Id(src),
+            Token::String => TokenType::String(src),
+            Token::EOF => TokenType::EOF,
+        }
+    }
+}
 
+
+fn main() {
+    //let mut lexer: Result<Lexer<Token>,LexerError> = Err(LexerError::EmptySource);
     let lexer = lexer!{
-        with TokenType,
-        rule "if" => {TokenType::If},
-        rule "else" => {TokenType::Else},
-        rule "then" => {TokenType::Then},
-        rule "==" => {TokenType::Equal},
-        rule "[a-zA-Z_]+" => |s| {TokenType::Id(s)},
-        rule "\"[^\"]*\"" => |s| {TokenType::String(s)},
-        eof TokenType::EOF,
+        with Token,
+        rule "if" => Token::If,
+        rule "else" => Token::Else,
+        rule "then" => Token::Then,
+        rule "==" => Token::Equal,
+        rule "[a-zA-Z_]+" => Token::Id,
+        rule "\"[^\"]*\"" => Token::String,
+        eof Token::EOF,
     };
     match lexer {
         Ok(lexer) => {
-            let src = " if a == b then\n \"hello world\"\n else x";
-            //let src = fs::read_to_string("./test.txt").unwrap();
-            //let src = src.as_str();
+            //let src = " if a == b then\n \"hello world\"\n else x";
+            let src = fs::read_to_string("./test.txt").unwrap();
+            let src = src.as_str();
             println!("Source size : {}",src.len());
             let tokens = lexer.run(src);
             let tokens = tokens.unwrap();
