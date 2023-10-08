@@ -98,6 +98,35 @@ fn test_lexer_run() {
     }
 }
 
+#[test]
+fn test_lexer_iter() {
+    let mut builder = LexerBuilder::<Token>::new();
+    builder.eof(Token::EOF)
+        .rule("if", Token::If)
+        .rule("else", Token::Else)
+        .rule("then", Token::Then)
+        .rule("==", Token::Equal)
+        .rule("[a-zA-Z_]+", Token::Id)
+        .rule("\"[^\"]*\"", Token::String);
+    let lexer = builder.build();
+    match lexer {
+        Ok(lexer) => {
+            let src = " if a == b then \"hello world\" else x";
+            for token in lexer.of(src) {
+                dbg!(&token);
+            }
+            let tokens = lexer.run(src);
+
+            assert!(tokens.is_ok());
+            let tokens = tokens.unwrap();
+            dbg!(&tokens);
+            assert!(tokens.len() == 9);
+        }
+        Err(e) => {
+            dbg!(e);
+        }
+    }
+}
 /*
 #[test]
 fn test_lexer_non_ascii() {

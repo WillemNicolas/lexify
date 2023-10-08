@@ -1,7 +1,5 @@
 use std::fs;
-
-use lexify::lexer_impl::{LexerBuilder, Lexer, Converter};
-use lexify::utils::lexer_error::LexerError;
+use lexify::lexer_impl::{LexerBuilder, Converter};
 use lexify::lexer;
 
 #[derive(Debug)]
@@ -40,9 +38,8 @@ impl<'input> Converter<'input> for Token {
     }
 }
 
-
 fn main() {
-    //let mut lexer: Result<Lexer<Token>,LexerError> = Err(LexerError::EmptySource);
+
     let lexer = lexer!{
         with Token,
         rule "if" => Token::If,
@@ -58,10 +55,17 @@ fn main() {
             //let src = " if a == b then\n \"hello world\"\n else x";
             let src = fs::read_to_string("./test.txt").unwrap();
             let src = src.as_str();
-            println!("Source size : {}",src.len());
-            let tokens = lexer.run(src);
-            let tokens = tokens.unwrap();
-            println!("Tokens found : {}",tokens.len());
+            //println!("Source size : {}",src.len());
+            //let tokens = lexer.run(src);
+            //let tokens = tokens.unwrap();
+            let mut tokens_len = 0;
+            //tokens_len = tokens.len();s
+            for _ in lexer.of(src) {
+            //for _ in src.to_string().chars() {
+                tokens_len += 1;
+                //dbg!(&token);
+            }
+            println!("Tokens found : {}",tokens_len);
         }
         Err(e) => {
             dbg!(e);
